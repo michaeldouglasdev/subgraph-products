@@ -10,7 +10,7 @@ interface MutationResponse {
   success: Boolean!
 }
 
-type Product @key(field: "sku") {
+type Product @key(fields: "sku") {
   sku: String!
   name: String!
 }
