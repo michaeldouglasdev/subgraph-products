@@ -5,8 +5,8 @@ const productService = new ProductService();
 
 export const resolvers: Resolvers = {
   Query: {
-    products: () => {
-      return productService.list();
+    products: async () => {
+      return await productService.list();
     }
   }
 }

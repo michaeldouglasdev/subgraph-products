@@ -17,8 +17,10 @@ const PRODUCTS: ProductModel[] = [
 
 export class ProductService {
 
-  list(): ProductModel[] {
-    return PRODUCTS;
+  async list(): Promise<ProductModel[]> {
+    return new Promise<ProductModel[]>((res) => setTimeout(() => res(PRODUCTS), 3000));
+
+    //return PRODUCTS;
   }
 
 }
