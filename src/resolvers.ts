@@ -18,7 +18,11 @@ export const resolvers: Resolvers = {
       console.log('context', context);
       console.log('info', info)
 
+
       return calculateBestPrice(parent);
+    },
+    __resolveReference: (parent) => {
+      return productService.getBySku(parent.sku);
     }
   }
 }

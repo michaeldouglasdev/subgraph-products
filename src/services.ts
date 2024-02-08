@@ -36,6 +36,9 @@ export class ProductService {
     return PRODUCTS;
   }
 
+  getBySku(sku: string): ProductModel {
+    return PRODUCTS.find(product => product.sku === sku)!;
+  }
 }
 
 type DeepPartial<T> = keyof T extends never ? T : {
