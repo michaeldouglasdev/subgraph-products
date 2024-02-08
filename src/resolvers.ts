@@ -1,4 +1,4 @@
-import { ProductService } from "./services";
+import { calculateBestPrice, ProductService } from "./services";
 import { Resolvers } from "./types";
 
 const productService = new ProductService();
@@ -11,11 +11,7 @@ export const resolvers: Resolvers = {
   },
   Product: {
     bestPrice: (parent) => {
-      console.log('parent', parent);
-      return {
-        value: 12,
-        label: '12'
-      }
+      return calculateBestPrice(parent);
     }
   }
 }

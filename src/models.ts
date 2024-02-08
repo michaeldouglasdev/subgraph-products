@@ -2,7 +2,7 @@ export interface ProductModel {
   sku: string;
   name: string;
   price: PriceModel;
-  offers?: ProductOfferModel[];
+  offers: ProductOfferModel[];
   bestPrice?: PriceModel;
 }
 

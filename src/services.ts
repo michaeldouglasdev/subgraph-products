@@ -1,4 +1,4 @@
-import { PriceModel, ProductModel } from "./models";
+import { PriceModel, ProductModel, ProductOfferModel } from "./models";
 
 const PRODUCTS: ProductModel[] = [
   {
@@ -7,7 +7,8 @@ const PRODUCTS: ProductModel[] = [
     price: {
       value: 10,
       label: '10 sub-product'
-    }
+    },
+    offers: [],
   },
   {
     sku: 'product-2',
@@ -15,7 +16,8 @@ const PRODUCTS: ProductModel[] = [
     price: {
       value: 20,
       label: '20 sub-product'
-    }
+    },
+    offers: [],
   },
   {
     sku: 'product-3',
@@ -23,31 +25,39 @@ const PRODUCTS: ProductModel[] = [
     price: {
       value: 30,
       label: '30 sub-product'
-    }
+    },
+    offers: [],
   }
 ]
 
 export class ProductService {
 
-  async list(): Promise<ProductModel[]> {
-    let products = await new Promise<ProductModel[]>((res) => setTimeout(() => res(PRODUCTS), 3000));
-
-    products = products.map(product => {
-
-      product.bestPrice = calculateBestPrice(product);
-
-      return product;
-    })
-
-    return products;
-    //return PRODUCTS;
+  list(): ProductModel[] {
+    return PRODUCTS;
   }
 
 }
 
-function calculateBestPrice(product: ProductModel): PriceModel {
+type DeepPartial<T> = keyof T extends never ? T : {
+  [P in keyof T]?: DeepPartial<T[P]>
+}
+
+interface CalculateBestPrice {
+  price: Pick<PriceModel, 'value'>;
+  offers: CalculateBestPriceOffer[];
+}
+
+interface CalculateBestPriceOffer {
+  price: CalculateBestPriceOfferPrice;
+}
+
+interface CalculateBestPriceOfferPrice {
+  value: number;
+}
+
+export function calculateBestPrice(product: CalculateBestPrice): PriceModel {
   const { offers, price } = product;
-  let bestPrice: PriceModel = price;
+  let bestPrice = price;
   offers?.forEach(offer => {
 
     if(offer.price.value < bestPrice.value) {
@@ -55,5 +65,8 @@ function calculateBestPrice(product: ProductModel): PriceModel {
     }
   })
 
-  return bestPrice;
+  return {
+    label: `${bestPrice}`,
+    value: bestPrice.value
+  }
 }

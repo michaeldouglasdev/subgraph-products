@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { ProductModel } from './models';
+import { ProductModel, PriceModel, ProductOfferModel } from './models';
 import { Context } from './context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -141,9 +141,9 @@ export type ResolversTypes = ResolversObject<{
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  Offer: ResolverTypeWrapper<Offer>;
+  Offer: ResolverTypeWrapper<ProductOfferModel>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
-  Price: ResolverTypeWrapper<Price>;
+  Price: ResolverTypeWrapper<PriceModel>;
   Product: ResolverTypeWrapper<ProductModel>;
   Query: ResolverTypeWrapper<{}>;
 }>;
@@ -154,9 +154,9 @@ export type ResolversParentTypes = ResolversObject<{
   Int: Scalars['Int']['output'];
   String: Scalars['String']['output'];
   Boolean: Scalars['Boolean']['output'];
-  Offer: Offer;
+  Offer: ProductOfferModel;
   ID: Scalars['ID']['output'];
-  Price: Price;
+  Price: PriceModel;
   Product: ProductModel;
   Query: {};
 }>;
@@ -183,7 +183,7 @@ export type PriceResolvers<ContextType = Context, ParentType extends ResolversPa
 
 export type ProductResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
   __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['Product']>, { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}>, ContextType>;
-  bestPrice?: Resolver<ResolversTypes['Price'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}> & GraphQLRecursivePick<ParentType, {"offers":{"price":{"value":true}}}>, ContextType>;
+  bestPrice?: Resolver<ResolversTypes['Price'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}> & GraphQLRecursivePick<ParentType, {"offers":{"price":{"value":true}},"price":{"value":true}}>, ContextType>;
   name?: Resolver<ResolversTypes['String'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}>, ContextType>;
 
   price?: Resolver<ResolversTypes['Price'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}>, ContextType>;
