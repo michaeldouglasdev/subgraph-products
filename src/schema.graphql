@@ -13,11 +13,15 @@ interface MutationResponse {
 type Product @key(fields: "sku") {
   sku: String!
   name: String!
-  price: Price!
+  price: ProductPrice! @external
   offers: [Offer] @external
-  bestPrice: Price! @requires(fields: "offers { price { value} }")
+  bestPrice: Price! @requires(fields: "offers { price { value} } price { value }")
 }
 
+type ProductPrice {
+  value: Int!
+  label: String!
+}
 type Price @shareable{
   value: Int!
   label: String!
