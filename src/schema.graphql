@@ -14,7 +14,7 @@ type Product @key(fields: "sku") {
   sku: String!
   name: String!
   price: Price!
-  offers: [Offer] @shareable
+  offers: [Offer] @external
 }
 
 type Price @shareable{
