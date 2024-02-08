@@ -24,6 +24,12 @@ export type MutationResponse = {
   success: Scalars['Boolean']['output'];
 };
 
+export type Offer = {
+  __typename?: 'Offer';
+  id: Scalars['ID']['output'];
+  price: Price;
+};
+
 export type Price = {
   __typename?: 'Price';
   label: Scalars['String']['output'];
@@ -32,7 +38,9 @@ export type Price = {
 
 export type Product = {
   __typename?: 'Product';
+  bestPrice: Price;
   name: Scalars['String']['output'];
+  offers?: Maybe<Array<Maybe<Offer>>>;
   price: Price;
   sku: Scalars['String']['output'];
 };
@@ -133,6 +141,8 @@ export type ResolversTypes = ResolversObject<{
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Offer: ResolverTypeWrapper<Offer>;
+  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Price: ResolverTypeWrapper<Price>;
   Product: ResolverTypeWrapper<ProductModel>;
   Query: ResolverTypeWrapper<{}>;
@@ -144,6 +154,8 @@ export type ResolversParentTypes = ResolversObject<{
   Int: Scalars['Int']['output'];
   String: Scalars['String']['output'];
   Boolean: Scalars['Boolean']['output'];
+  Offer: Offer;
+  ID: Scalars['ID']['output'];
   Price: Price;
   Product: ProductModel;
   Query: {};
@@ -156,6 +168,13 @@ export type MutationResponseResolvers<ContextType = Context, ParentType extends 
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 }>;
 
+export type OfferResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Offer'] = ResolversParentTypes['Offer']> = ResolversObject<{
+  __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['Offer']>, { __typename: 'Offer' } & GraphQLRecursivePick<ParentType, {"id":true}>, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  price?: Resolver<ResolversTypes['Price'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type PriceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Price'] = ResolversParentTypes['Price']> = ResolversObject<{
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -164,9 +183,11 @@ export type PriceResolvers<ContextType = Context, ParentType extends ResolversPa
 
 export type ProductResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
   __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['Product']>, { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}>, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  price?: Resolver<ResolversTypes['Price'], ParentType, ContextType>;
-  sku?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  bestPrice?: Resolver<ResolversTypes['Price'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}> & GraphQLRecursivePick<ParentType, {"offers":{"price":{"value":true}}}>, ContextType>;
+  name?: Resolver<ResolversTypes['String'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}>, ContextType>;
+
+  price?: Resolver<ResolversTypes['Price'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}>, ContextType>;
+  sku?: Resolver<ResolversTypes['String'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}>, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -176,6 +197,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
   MutationResponse?: MutationResponseResolvers<ContextType>;
+  Offer?: OfferResolvers<ContextType>;
   Price?: PriceResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

@@ -9,4 +9,13 @@ export const resolvers: Resolvers = {
       return await productService.list();
     }
   },
+  Product: {
+    bestPrice: (parent) => {
+      console.log('parent', parent);
+      return {
+        value: 12,
+        label: '12'
+      }
+    }
+  }
 }
