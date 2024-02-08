@@ -16,7 +16,7 @@ type Product @key(fields: "sku") {
   price: Price!
 }
 
-type Price {
+type Price @shareable{
   value: Int!
   label: String!
 }
