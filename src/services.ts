@@ -1,4 +1,4 @@
-import { ProductModel } from "./models";
+import { PriceModel, ProductModel } from "./models";
 
 const PRODUCTS: ProductModel[] = [
   {
@@ -30,9 +30,30 @@ const PRODUCTS: ProductModel[] = [
 export class ProductService {
 
   async list(): Promise<ProductModel[]> {
-    return new Promise<ProductModel[]>((res) => setTimeout(() => res(PRODUCTS), 3000));
+    let products = await new Promise<ProductModel[]>((res) => setTimeout(() => res(PRODUCTS), 3000));
 
+    products = products.map(product => {
+
+      product.bestPrice = calculateBestPrice(product);
+
+      return product;
+    })
+
+    return products;
     //return PRODUCTS;
   }
 
+}
+
+function calculateBestPrice(product: ProductModel): PriceModel {
+  const { offers, price } = product;
+  let bestPrice: PriceModel = price;
+  offers?.forEach(offer => {
+
+    if(offer.price.value < bestPrice.value) {
+      bestPrice = offer.price
+    }
+  })
+
+  return bestPrice;
 }

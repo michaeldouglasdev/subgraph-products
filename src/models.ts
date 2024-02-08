@@ -1,10 +1,17 @@
 export interface ProductModel {
   sku: string;
   name: string;
-  price: ProductPriceModel;
+  price: PriceModel;
+  offers?: ProductOfferModel[];
+  bestPrice?: PriceModel;
 }
 
-export interface ProductPriceModel {
+export interface PriceModel {
   value: number;
   label: string;
 }
+export interface ProductOfferModel {
+  id: string;
+  price: PriceModel;
+}
+
