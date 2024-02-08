@@ -13,4 +13,10 @@ interface MutationResponse {
 type Product @key(fields: "sku") {
   sku: String!
   name: String!
+  price: Price!
+}
+
+type Price {
+  value: Int!
+  label: String!
 }

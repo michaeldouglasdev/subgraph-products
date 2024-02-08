@@ -8,5 +8,5 @@ export const resolvers: Resolvers = {
     products: async () => {
       return await productService.list();
     }
-  }
+  },
 }
