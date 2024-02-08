@@ -13,9 +13,9 @@ interface MutationResponse {
 type Product @key(fields: "sku") {
   sku: String!
   name: String!
-  price: ProductPrice! @external
+  price: ProductPrice!
   offers: [Offer] @external
-  bestPrice: Price! @requires(fields: "offers { price { value} } price { value }")
+  bestPrice: Price!
 }
 
 type ProductPrice {

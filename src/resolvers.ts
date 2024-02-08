@@ -13,6 +13,7 @@ export const resolvers: Resolvers = {
     bestPrice: (parent) => {
 
       console.log('parentt', parent)
+
       return calculateBestPrice(parent);
     }
   }
