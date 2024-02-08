@@ -10,9 +10,13 @@ export const resolvers: Resolvers = {
     }
   },
   Product: {
-    bestPrice: (parent) => {
+    bestPrice: (parent, args, context, info) => {
 
-      console.log('parentt', parent)
+      console.log('parentt', parent);
+      console.log('parentt2', parent.price);
+      console.log('args', args);
+      console.log('context', context);
+      console.log('info', info)
 
       return calculateBestPrice(parent);
     }
