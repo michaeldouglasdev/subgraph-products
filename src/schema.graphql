@@ -23,6 +23,5 @@ type Price @shareable{
 }
 
 type Offer @key(fields: "id", resolvable: false) {
-  id: String!
-  price: Price!
+  id: ID!
 }
