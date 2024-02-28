@@ -2,8 +2,6 @@ export interface ProductModel {
   sku: string;
   name: string;
   price: PriceModel;
-  offers: ProductOfferModel[];
-  bestPrice?: PriceModel;
 }
 
 export interface PriceModel {
@@ -15,3 +13,8 @@ export interface ProductOfferModel {
   price: PriceModel;
 }
 
+export interface ShowcaseModel {
+  id: string;
+  title: string;
+  productsSku: string[];
+}

@@ -1,43 +1,20 @@
-import { PriceModel, ProductModel, ProductOfferModel } from "./models";
+import { Datasource } from "./datasource";
+import { PriceModel, ProductModel, ShowcaseModel } from "./models";
 
-const PRODUCTS: ProductModel[] = [
-  {
-    sku: 'product-1',
-    name: 'Product Name 1',
-    price: {
-      value: 10,
-      label: '10 sub-product'
-    },
-    offers: [],
-  },
-  {
-    sku: 'product-2',
-    name: 'Product Name 2',
-    price: {
-      value: 20,
-      label: '20 sub-product'
-    },
-    offers: [],
-  },
-  {
-    sku: 'product-3',
-    name: 'Product Name 3',
-    price: {
-      value: 30,
-      label: '30 sub-product'
-    },
-    offers: [],
-  }
-]
+const datasource = new Datasource();
 
 export class ProductService {
 
-  list(): ProductModel[] {
-    return PRODUCTS;
+  async list(): Promise<ProductModel[]> {
+    return await datasource.get('/products')
   }
 
-  getBySku(sku: string): ProductModel {
-    return PRODUCTS.find(product => product.sku === sku)!;
+  async getBySku(sku: string): Promise<ProductModel> {
+    return await datasource.get(`/products/${sku}`);
+  }
+
+  async listShowcase(): Promise<ShowcaseModel[]> {
+    const showcase =  await datasource.get<ShowcaseModel>(`/showcase`);
   }
 }
 
@@ -69,7 +46,7 @@ export function calculateBestPrice(product: CalculateBestPrice): PriceModel {
   })
 
   return {
-    label: `${bestPrice}`,
+    label: `${bestPrice.value}`,
     value: bestPrice.value
   }
 }

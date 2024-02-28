@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { ProductModel, PriceModel, ProductOfferModel } from './models';
+import { ProductModel, PriceModel, ProductOfferModel, ShowcaseModel } from './models';
 import { Context } from './context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -18,6 +18,11 @@ export type Scalars = {
   _FieldSet: { input: any; output: any; }
 };
 
+export enum CacheControlScope {
+  Private = 'PRIVATE',
+  Public = 'PUBLIC'
+}
+
 export type MutationResponse = {
   code: Scalars['Int']['output'];
   message: Scalars['String']['output'];
@@ -33,21 +38,35 @@ export type Offer = {
 export type Price = {
   __typename?: 'Price';
   label: Scalars['String']['output'];
+  test?: Maybe<Scalars['String']['output']>;
   value: Scalars['Int']['output'];
 };
 
 export type Product = {
   __typename?: 'Product';
-  bestPrice: Price;
   name: Scalars['String']['output'];
-  offers?: Maybe<Array<Maybe<Offer>>>;
   price: Price;
   sku: Scalars['String']['output'];
 };
 
 export type Query = {
   __typename?: 'Query';
+  heavyField: Scalars['String']['output'];
+  listShowcase: Array<Maybe<Showcase>>;
   products: Array<Maybe<Product>>;
+};
+
+
+export type QueryHeavyFieldArgs = {
+  arg1?: InputMaybe<Scalars['String']['input']>;
+  arg2?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Showcase = {
+  __typename?: 'Showcase';
+  id: Scalars['ID']['output'];
+  products: Array<Product>;
+  title: Scalars['String']['output'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -137,6 +156,7 @@ export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = R
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  CacheControlScope: CacheControlScope;
   MutationResponse: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['MutationResponse']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -146,6 +166,7 @@ export type ResolversTypes = ResolversObject<{
   Price: ResolverTypeWrapper<PriceModel>;
   Product: ResolverTypeWrapper<ProductModel>;
   Query: ResolverTypeWrapper<{}>;
+  Showcase: ResolverTypeWrapper<ShowcaseModel>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -159,7 +180,16 @@ export type ResolversParentTypes = ResolversObject<{
   Price: PriceModel;
   Product: ProductModel;
   Query: {};
+  Showcase: ShowcaseModel;
 }>;
+
+export type CacheControlDirectiveArgs = {
+  inheritMaxAge?: Maybe<Scalars['Boolean']['input']>;
+  maxAge?: Maybe<Scalars['Int']['input']>;
+  scope?: Maybe<CacheControlScope>;
+};
+
+export type CacheControlDirectiveResolver<Result, Parent, ContextType = Context, Args = CacheControlDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type MutationResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']> = ResolversObject<{
   __resolveType: TypeResolveFn<null, ParentType, ContextType>;
@@ -177,22 +207,30 @@ export type OfferResolvers<ContextType = Context, ParentType extends ResolversPa
 
 export type PriceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Price'] = ResolversParentTypes['Price']> = ResolversObject<{
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  test?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ProductResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
   __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['Product']>, { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}>, ContextType>;
-  bestPrice?: Resolver<ResolversTypes['Price'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}> & GraphQLRecursivePick<ParentType, {"offers":{"price":{"value":true}},"price":{"value":true}}>, ContextType>;
-  name?: Resolver<ResolversTypes['String'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}>, ContextType>;
-
-  price?: Resolver<ResolversTypes['Price'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}>, ContextType>;
-  sku?: Resolver<ResolversTypes['String'], { __typename: 'Product' } & GraphQLRecursivePick<ParentType, {"sku":true}>, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  price?: Resolver<ResolversTypes['Price'], ParentType, ContextType>;
+  sku?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  heavyField?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<QueryHeavyFieldArgs>>;
+  listShowcase?: Resolver<Array<Maybe<ResolversTypes['Showcase']>>, ParentType, ContextType>;
   products?: Resolver<Array<Maybe<ResolversTypes['Product']>>, ParentType, ContextType>;
+}>;
+
+export type ShowcaseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Showcase'] = ResolversParentTypes['Showcase']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
@@ -201,5 +239,9 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   Price?: PriceResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Showcase?: ShowcaseResolvers<ContextType>;
 }>;
 
+export type DirectiveResolvers<ContextType = Context> = ResolversObject<{
+  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>;
+}>;

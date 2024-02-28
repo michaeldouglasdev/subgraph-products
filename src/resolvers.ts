@@ -1,28 +1,24 @@
-import { calculateBestPrice, ProductService } from "./services";
+import { ProductService } from "./services";
 import { Resolvers } from "./types";
 
 const productService = new ProductService();
 
 export const resolvers: Resolvers = {
   Query: {
-    products: () => {
-      return productService.list();
+    products: async () => {
+      return await productService.list();
+    },
+    listShowcase: async () => {
+      return productService.listShowcase();
+    },
+    heavyField: async (parent, { arg1, arg2}) => {
+      return await new Promise(res => setTimeout(() => res("Too Heavy"), 3000 ));
     }
   },
   Product: {
-    bestPrice: (parent, args, context, info) => {
-
-      console.log('parentt', parent);
-      console.log('parentt2', parent.price);
-      console.log('args', args);
-      console.log('context', context);
-      console.log('info', info)
-
-
-      return calculateBestPrice(parent);
-    },
-    __resolveReference: (parent) => {
-      return productService.getBySku(parent.sku);
+    __resolveReference: async (parent, args, context) => {
+      const product = await productService.getBySku(parent.sku);
+      return product
     }
   }
 }

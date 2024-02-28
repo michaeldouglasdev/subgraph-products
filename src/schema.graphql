@@ -1,7 +1,20 @@
-extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable", "@external", "@requires"])
+extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable", "@external", "@requires", "@inaccessible"])
+
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
+directive @cacheControl(
+  maxAge: Int
+  scope: CacheControlScope
+  inheritMaxAge: Boolean
+) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
 
 type Query {
   products: [Product]!
+  listShowcase: [Showcase]!
+  heavyField(arg1: String, arg2: String): String! @cacheControl(maxAge: 60)
 }
 
 interface MutationResponse {
@@ -13,21 +26,22 @@ interface MutationResponse {
 type Product @key(fields: "sku") {
   sku: String!
   name: String!
-  price: ProductPrice!
-  offers: [Offer] @external
-  bestPrice: ProductPrice! @requires(fields: "offers { price { value} }")
+  price: Price! @shareable
 }
 
-type ProductPrice {
-  value: Int!
-  label: String!
-}
 type Price @shareable{
   value: Int!
   label: String!
+  test: String @inaccessible
 }
 
 type Offer @key(fields: "id", resolvable: false) {
   id: ID!
   price: Price! @shareable
+}
+
+type Showcase {
+  id: ID!
+  title: String!
+  products: [Product!]!
 }

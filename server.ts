@@ -3,6 +3,7 @@ import { buildSubgraphSchema } from '@apollo/subgraph';
 import { resolvers } from './src/resolvers';
 import {gql} from 'graphql-tag';
 import { readFileSync } from 'fs';
+import responseCachePlugin from '@apollo/server-plugin-response-cache';
 
 const schema = gql(readFileSync('./src/schema.graphql', { encoding: 'utf-8' }));
 
@@ -20,6 +21,7 @@ async function bootstrap() {
       resolvers,
     }),
     introspection: true,
+    plugins: [responseCachePlugin()]
   })
 
   const { url } = await startStandaloneServer(server, {

@@ -12,7 +12,8 @@ const codegen: CodegenConfig = {
         mappers: {
           Product: './models#ProductModel',
           Price: './models#PriceModel',
-          Offer: './models#ProductOfferModel'
+          Offer: './models#ProductOfferModel',
+          Showcase: './models#ShowcaseModel'
         }
       }
     }
