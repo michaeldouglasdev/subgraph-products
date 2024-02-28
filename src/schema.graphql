@@ -14,7 +14,7 @@ directive @cacheControl(
 type Query {
   products: [Product]!
   listShowcase: [Showcase]!
-  heavyField(arg1: String, arg2: String): String! @cacheControl(maxAge: 60)
+  heavyField(arg1: String, arg2: String): String! @cacheControl(maxAge: 30)
 }
 
 interface MutationResponse {
@@ -26,7 +26,7 @@ interface MutationResponse {
 type Product @key(fields: "sku") {
   sku: String!
   name: String!
-  price: Price! @shareable
+  price: Price!
 }
 
 type Price @shareable{
